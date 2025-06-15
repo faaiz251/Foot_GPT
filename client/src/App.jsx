@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./landing/Home";
-// import Register from "./pages/Register";
-// import Login from "./pages/Login";
+import Signup from "./landing/Signup";
+import Login from "./landing/Login";
 // import PrivateRoute from "./pages/PrivateRoute";
 // import Dashboard from "./pages/Dashboard";
 // import Quiz from "./pages/Quiz";
@@ -13,9 +13,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* <Route path="/register" element={<Register />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/learnmore" element={<Learnmore />} />
+          {/* <Route path="/learnmore" element={<Learnmore />} />
           <Route
             path="/quiz"
             element={

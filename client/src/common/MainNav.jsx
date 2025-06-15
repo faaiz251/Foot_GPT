@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button } from "../components/ui/button"; // Adjust the path if needed
+import { Button } from "../../components/ui/button"; // Adjust the path if needed
 
 // If you're using Geist via @fontsource or Google Fonts CDN, import it in index.css or index.html
 // For now, we assume fonts are globally applied via Tailwind or CSS

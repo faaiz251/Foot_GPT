@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import MainNav from "../common/MainNav";
-import { Button } from "../components/ui/button"; // adjust path if needed
+import { Button } from "../../components/ui/button"; // adjust path if needed
 
 
 export default function Home() {
