@@ -1,8 +1,8 @@
 import { cn } from "../../lib/utils"
-import { Button } from "../../components/ui/button"
-import { Card, CardContent } from "../../components/ui/card"
-import { Input } from "../../components/ui/input"
-import { Label } from "../../components/ui/label"
+import { Button } from "./button"
+import { Card, CardContent } from "./card"
+import { Input } from "./input"
+import { Label } from "./label"
 
 export function LoginForm({ className, ...props }) {
   return (
@@ -12,7 +12,7 @@ export function LoginForm({ className, ...props }) {
           <form className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Welcome back</h1>
+                <h1 className="text-2xl font-bold">Welcome back!</h1>
                 <p className="text-balance text-muted-foreground">Login to your account</p>
               </div>
               <div className="grid gap-2">

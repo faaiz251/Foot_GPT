@@ -27,10 +27,10 @@ export default function Home() {
         </p>
 
         <div className="mt-6 space-x-4">
-          <Link to="/auth/signup">
+          <Link to="/signup">
             <Button variant="outline" size="lg">Get Started</Button>
           </Link>
-          <Link to="/auth/login">
+          <Link to="/login">
             <Button variant="outline" size="lg">Already a member?</Button>
           </Link>
         </div>
