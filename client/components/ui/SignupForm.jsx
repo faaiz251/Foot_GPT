@@ -11,32 +11,61 @@ import {
   SelectItem,
 } from "./select";
 import { useState } from "react";
+import axios from "axios";
 
 export function SignupForm({ className, ...props }) {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    name: "",
-    position: "midfielder",
-    experience_level: "beginner",
-  });
+  // const [formData, setFormData] = useState({
+  //   full_name: "",
+  //   email: "",
+  //   password: "",
+  //   position: "midfielder",
+  //   experience_level: "beginner",
+  // });
+
+  const [full_name, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [position, setPosition] = useState("");
+  const [experience_level, setExperienceLevel] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/signup", {
+        full_name,
+        email,
+        password,
+        position,
+        experience_level,
+      });
+
+      if (res.status === 201 || res.status === 200) {
+        alert("Signup successful! Redirecting to login...");
+        window.location.href = "/login";
+      }
+    } catch (err) {
+      console.error("Signup error:", err);
+      alert("Signup failed. Please try again.");
+    }
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden">
         <CardContent className="p-0">
-          <form className="p-6 md:p-8">
+          <form  onSubmit={handleSubmit} className="p-6 md:p-8">
             <div className="flex flex-col gap-[20px]">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Create your Account</h1>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="full_name">Full Name</Label>
                 <Input
-                  id="name"
-                  type="name"
+                  id="full_name"
+                  type="full_name"
                   placeholder="xyz"
                   required
+                              onChange={(e) => setFullName(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
@@ -46,21 +75,23 @@ export function SignupForm({ className, ...props }) {
                   type="email"
                   placeholder="m@example.com"
                   required
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" type="password" required onChange={(e) => setPassword(e.target.value)}  />
+
               </div>
               <div className="grid gap-2">
                 <Label>Position</Label>
 
                 <Select
-                  value={formData.position}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, position: value })
+                value='midfielder'
+                  onChange={(e) =>
+                    setPosition(e.target.value) 
                   }
                 >
                   <SelectTrigger className="w-full">
@@ -79,9 +110,9 @@ export function SignupForm({ className, ...props }) {
                 <Label>Experience Level</Label>
 
                 <Select
-                  value={formData.experience_level}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, experience_level: value })
+                value='beginner'
+                  onChange={(e) =>
+                    setExperienceLevel(e.target.value)
                   }
                 >
                   <SelectTrigger className="w-full">

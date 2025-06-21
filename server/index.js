@@ -3,21 +3,28 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 
-import coachRoute from "./routes/coach.js";
-const app = express();
+import authRoutes from "./routes/auth/auth.js";
+import userRoutes from "./routes/me/userRoutes.js";
 
 dotenv.config();
+
+const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/coach", coachRoute);
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+
+app.get('/cronjob', (req, res) => {
+  res.status(200).send("Hi to cron job from server");
+});
 
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    dbName: "FootGPT",
+    dbName: "Foot_GPT",
   })
   .then(() => {
     console.log("Connected to MongoDB");
