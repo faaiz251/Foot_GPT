@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    experience: {
+    experience_level: {
       type: String,
       required: true,
     },

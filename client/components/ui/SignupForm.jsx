@@ -89,11 +89,11 @@ export function SignupForm({ className, ...props }) {
                 <Label>Position</Label>
 
                 <Select
-                value='midfielder'
-                  onChange={(e) =>
-                    setPosition(e.target.value) 
-                  }
+                   value={position}
+  onValueChange={(value) => setPosition(value)}
+                  
                 >
+                  
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select Position" />
                   </SelectTrigger>
@@ -110,10 +110,8 @@ export function SignupForm({ className, ...props }) {
                 <Label>Experience Level</Label>
 
                 <Select
-                value='beginner'
-                  onChange={(e) =>
-                    setExperienceLevel(e.target.value)
-                  }
+                 value={experience_level}
+  onValueChange={(value) => setExperienceLevel(value)}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select Experience Level" />

@@ -3,13 +3,36 @@ import { Button } from "./button"
 import { Card, CardContent } from "./card"
 import { Input } from "./input"
 import { Label } from "./label"
+import { useState } from "react"
+import axios from "axios"
 
 export function LoginForm({ className, ...props }) {
+   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
+        email,
+        password,
+      });
+
+      if (res.status === 200 && res.data.token) {
+        localStorage.setItem("token", res.data.token);
+        alert("Login successful!");
+        window.location.href = "/dashboard"; // or wherever you want to redirect
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("Invalid credentials or server error.");
+    }
+  };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden">
         <CardContent className="p-0">
-          <form className="p-6 md:p-8">
+          <form onSubmit={handleLogin} className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome back!</h1>
@@ -17,7 +40,8 @@ export function LoginForm({ className, ...props }) {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="m@example.com" required />
+                <Input id="email" type="email" placeholder="m@example.com" required  value={email}
+                  onChange={(e) => setEmail(e.target.value)} />
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
@@ -26,7 +50,8 @@ export function LoginForm({ className, ...props }) {
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" type="password" required value={password}
+                  onChange={(e) => setPassword(e.target.value)} />
               </div>
               <Button type="submit" className="w-full bg-black text-white cursor-pointer hover:bg-gray-800">
                 Login
