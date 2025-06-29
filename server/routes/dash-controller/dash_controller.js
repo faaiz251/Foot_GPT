@@ -1,8 +1,6 @@
 import User from "../model/user.js";
 import genAI from '../config/gemini.js';
 
-
-
 export const getUserProfile = async (req, res) => {
  try {
   const user = await User.findById(req.user._id).select('-password');
@@ -27,7 +25,7 @@ export const getUserProfile = async (req, res) => {
 
 export const getDailyTip = async (req, res) => {
   try {
-     const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const prompt = `
@@ -46,11 +44,13 @@ export const getDailyTip = async (req, res) => {
       model: "gemini-2.0-flash",
       contents: [{ role: "user", parts: [{ text: prompt }] }],
     });
-    const content = response.text().trim();
-
+const content = response?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!content) {
+      return res.status(500).json({ message: "Failed to generate content" });
+    }
+    console.log("Generated content:", content);
     let tip = '';
     let quote = '';
-
     content.split('\n').forEach((line) => {
       if (line.startsWith('Tip:')) {
         tip = line.replace('Tip:', '').trim();
@@ -59,14 +59,18 @@ export const getDailyTip = async (req, res) => {
       }
     });
 
-    if (!tip) tip = 'Focus on your first touch today - it sets up everything that follows.';
-    if (!quote) quote = 'Success is where preparation and opportunity meet.';
+    console.log("Extracted tip:", tip);
+    console.log("Extracted quote:", quote);
+    // if (!tip) tip = 'Focus on your first touch today - it sets up everything that follows.';
+    // if (!quote) quote = 'Success is where preparation and opportunity meet.';
+    if(!tip || !quote) {
+      return res.status(500).json({ message: "Failed to generate tip or quote" });
+    }
 
     res.json({ tip, motivational_quote: quote });
   } catch (err) {
     res.status(500).json({
-      tip: 'Focus on your first touch today - it sets up everything that follows.',
-      motivational_quote: 'Success is where preparation and opportunity meet.',
+    message: "Failed to generate question", error: err.message
     });
   }     
 };

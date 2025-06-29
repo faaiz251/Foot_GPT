@@ -53,7 +53,7 @@ const HomePage = () => {
       <Card>
         <CardHeader>
           <CardTitle>
-            {user ? `Welcome back, ${user.name}! ⚽` : <Skeleton className="h-6 w-1/2" />}
+            {user ? `Welcome back, ${user.full_name}! ⚽` : <Skeleton className="h-6 w-1/2" />}
           </CardTitle>
         </CardHeader>
         <CardContent className="grid md:grid-cols-3 gap-4">

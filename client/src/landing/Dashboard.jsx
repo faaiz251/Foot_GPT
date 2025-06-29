@@ -7,7 +7,6 @@ import {
 } from "../../components/ui/tabs";
 import { Button } from "../../components/ui/button";
 import axios from "axios";
-// import { AuthContext } from "@/context/AuthContext"; // Adjust path if needed
 
 import HomePage from "../Minor Pages/HomePage";
 // import TrainingPage from "./TrainingPage";
@@ -16,35 +15,35 @@ import HomePage from "../Minor Pages/HomePage";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("home");
-  //   const { user, logout } = useContext(AuthContext);
+  const [session, setSession] = useState(null);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     window.location.href = "/login";
   };
 
-  // useEffect(() => {
-  //   const checkSession = async () => {
-  //     const token = localStorage.getItem("token");
-  //     if (!token) {
-  //       window.location.href = "/login";
-  //       return;
-  //     }
+  useEffect(() => {
+    const checkSession = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        window.location.href = "/login";
+        return;
+      }
 
-  //     try {
-  //       const res = await axios.get("http://localhost:5000/api/auth/login", {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       });
-  //       setSession(res.data);
-  //     } catch (err) {
-  //       window.location.href = "/login";
-  //     }
-  //   };
+      try {
+        const res = await axios.get("http://localhost:5000/api/auth/login", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setSession(res.data);
+      } catch (err) {
+        window.location.href = "/login";
+      }
+    };
 
-  //   checkSession();
-  // }, []);
+    checkSession();
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -57,8 +56,8 @@ const Dashboard = () => {
                 ⚽ Football Assistant
               </h1>
               <span className="text-sm text-gray-600">
-                Welcome! ⚽
-                {/* Welcome, {session?.user?.name || "Player"}! */}
+                {/* Welcome! ⚽ */}
+                Welcome! ⚽, {session?.user?.full_name || "Player"}!
               </span>
             </div>
             <Button

@@ -6,6 +6,7 @@ import cors from "cors";
 import authRoutes from "./routes/auth/auth.js";
 import userRoutes from "./routes/me/userRoutes.js";
 import dashRoutes from "./routes/dash/dash.js";
+import { authenticateUser } from "./routes/middleware/authmiddleware.js";
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/user" , dashRoutes );
+app.use("/api/user" , authenticateUser , dashRoutes );
 
 app.get('/cronjob', (req, res) => {
   res.status(200).send("Hi to cron job from server");
