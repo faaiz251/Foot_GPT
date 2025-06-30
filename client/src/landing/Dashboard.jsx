@@ -9,6 +9,7 @@ import { Button } from "../../components/ui/button";
 import axios from "axios";
 
 import HomePage from "../Minor Pages/HomePage";
+import TrainingPage from "../Minor Pages/TrainingPage";
 // import TrainingPage from "./TrainingPage";
 // import HistoryPage from "./HistoryPage";
 // import TipsPage from "./TipsPage";
@@ -22,28 +23,28 @@ const Dashboard = () => {
     window.location.href = "/login";
   };
 
-  useEffect(() => {
-    const checkSession = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        window.location.href = "/login";
-        return;
-      }
+  // useEffect(() => {
+  //   const checkSession = async () => {
+  //     const token = localStorage.getItem("token");
+  //     if (!token) {
+  //       window.location.href = "/login";
+  //       return;
+  //     }
 
-      try {
-        const res = await axios.get("http://localhost:5000/api/auth/login", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setSession(res.data);
-      } catch (err) {
-        window.location.href = "/login";
-      }
-    };
+  //     try {
+  //       const res = await axios.get("http://localhost:5000/api/auth/login", {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+  //       setSession(res.data);
+  //     } catch (err) {
+  //       window.location.href = "/login";
+  //     }
+  //   };
 
-    checkSession();
-  }, []);
+  //   checkSession();
+  // }, []);
 
   return (
     <div className="min-h-screen">
@@ -55,10 +56,6 @@ const Dashboard = () => {
               <h1 className="text-2xl font-bold text-gray-800">
                 ⚽ Football Assistant
               </h1>
-              <span className="text-sm text-gray-600">
-                {/* Welcome! ⚽ */}
-                Welcome! ⚽, {session?.user?.full_name || "Player"}!
-              </span>
             </div>
             <Button
               variant="ghost"
@@ -95,12 +92,11 @@ const Dashboard = () => {
         </div>
 
         {/* TabsContent must be direct children of <Tabs> */}
-        <TabsContent value="home"> <HomePage />
+        <TabsContent value="home">
+          <HomePage />
         </TabsContent>
         <TabsContent value="training">
-          <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            Training content here
-          </div>
+          <TrainingPage />
         </TabsContent>
         <TabsContent value="history">
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

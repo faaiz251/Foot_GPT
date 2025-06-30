@@ -30,7 +30,7 @@ const HomePage = () => {
         headers: { Authorization: `Bearer ${getAuthToken()}` },
       });
       setUser(res.data.user);
-      setStats(res.data.stats);
+      // setStats(res.data.stats);
     } catch (err) {
       console.error("Error fetching profile:", err);
     }
@@ -38,7 +38,7 @@ const HomePage = () => {
 
   const fetchDailyTip = async () => {
     try {
-      const res = await axios.get(`${API}/daily-tip`, {
+      const res = await axios.get(`${API}/user/daily-tip`, {
         headers: { Authorization: `Bearer ${getAuthToken()}` },
       });
       setDailyTip(res.data);
@@ -72,7 +72,7 @@ const HomePage = () => {
           <Card className="bg-purple-50">
             <CardContent className="pt-4">
               <p className="font-semibold text-purple-800">Member Since</p>
-              <p className="text-purple-600">{user && new Date(user.created_at).toLocaleDateString()}</p>
+              <p className="text-purple-600">{user && new Date(user.createdAt).toLocaleDateString('en-GB')}</p>
             </CardContent>
           </Card>
         </CardContent>

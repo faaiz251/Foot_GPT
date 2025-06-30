@@ -6,15 +6,15 @@ export const getUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id).select('-password');
   if (!user) return res.status(404).json({ message: "User not found" });
 
-  const sessionsCount = await TrainingSession.countDocuments({ user_id: req.user._id });
-  const plansCount = await TrainingPlan.countDocuments({ user_id: req.user._id });
+  // const sessionsCount = await TrainingSession.countDocuments({ user_id: req.user._id });
+  // const plansCount = await TrainingPlan.countDocuments({ user_id: req.user._id });
 
   res.json({
     user,
-    stats: {
-      total_training_sessions: sessionsCount,
-      total_training_plans: plansCount,
-    },
+    // stats: {
+    //   total_training_sessions: sessionsCount,
+    //   total_training_plans: plansCount,
+    // },
   });
 }
  catch (err) {
@@ -52,9 +52,9 @@ const content = response?.candidates?.[0]?.content?.parts?.[0]?.text;
     let tip = '';
     let quote = '';
     content.split('\n').forEach((line) => {
-      if (line.startsWith('Tip:')) {
+      if (line.startsWith('**Tip:**')) {
         tip = line.replace('Tip:', '').trim();
-      } else if (line.startsWith('Quote:')) {
+      } else if (line.startsWith('**Quote:**')) {
         quote = line.replace('Quote:', '').trim();
       }
     });
