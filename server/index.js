@@ -13,10 +13,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({
-  origin: 'https://foot-gpt.vercel.app/', // or your frontend production URL
-  credentials: true,
-}));
+app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
