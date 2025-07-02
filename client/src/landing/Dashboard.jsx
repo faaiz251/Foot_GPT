@@ -16,7 +16,7 @@ import TrainingPage from "../Minor Pages/TrainingPage";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("home");
-  const [session, setSession] = useState(null);
+  // const [session, setSession] = useState(null);
 
   const handleLogout = () => {
     localStorage.removeItem("token");

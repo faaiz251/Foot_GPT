@@ -7,63 +7,78 @@ import { Textarea } from "../../components/ui/textarea";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../../components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../components/ui/dialog";
 
+const getAuthToken = () => localStorage.getItem("token");
+
+
 const TrainingPage = () => {
   const [trainingPlans, setTrainingPlans] = useState([]);
   const [generating, setGenerating] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
 
-  useEffect(() => {
-    fetchTrainingPlans();
-  }, []);
+//   useEffect(() => {
+//     fetchTrainingPlans();
+//   }, []);
 
-  const fetchTrainingPlans = async () => {
-    try {
-      const response = await axios.get(`${API}/training/plans`, {
-        headers: { Authorization: `Bearer ${getAuthToken()}` },
-      });
-      setTrainingPlans(response.data);
-    } catch (error) {
-      console.error("Error fetching training plans:", error);
-    }
-  };
+//   const fetchTrainingPlans = async () => {
+//     try {
+//       const response = await axios.get(`${API}/training/plans`, {
+//         headers: { Authorization: `Bearer ${getAuthToken()}` },
+//       });
+//       setTrainingPlans(response.data);
+//     } catch (error) {
+//       console.error("Error fetching training plans:", error);
+//     }
+//   };
 
   const generateNewPlan = async () => {
     setGenerating(true);
     try {
-      const response = await axios.post(`${API}/training/generate`, {}, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user/training/generate`, {}, {
         headers: { Authorization: `Bearer ${getAuthToken()}` },
       });
-      setTrainingPlans([response.data, ...trainingPlans]);
+      const fullText = response.data.trainingPlans;
+    //   const parts = fullText.split("\n").filter((line) => line.trim() !== "");
+      setTrainingPlans(fullText);
     } catch (error) {
       console.error("Error generating plan:", error);
     }
     setGenerating(false);
   };
 
-  const completePlan = async (planId, rating, notes) => {
-    try {
-      await axios.post(
-        `${API}/training/complete`,
-        { training_plan_id: planId, rating, notes },
-        { headers: { Authorization: `Bearer ${getAuthToken()}` } }
-      );
-      alert("Training session completed!");
-      setSelectedPlan(null);
-    } catch (error) {
-      console.error("Error completing training:", error);
-    }
-  };
+//   const completePlan = async (planId, rating, notes) => {
+//     try {
+//       await axios.post(
+//         `${API}/training/complete`,
+//         { training_plan_id: planId, rating, notes },
+//         { headers: { Authorization: `Bearer ${getAuthToken()}` } }
+//       );
+//       alert("Training session completed!");
+//       setSelectedPlan(null);
+//     } catch (error) {
+//       console.error("Error completing training:", error);
+//     }
+//   };
 
   return (
     <div className="space-y-6 p-4">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Training Plans</h2>
-        <Button onClick={generateNewPlan} disabled={generating}>
+        <Button onClick={generateNewPlan} className="cursor-pointer" disabled={generating}>
           {generating ? "Generating..." : "🤖 Generate New Plan"}
         </Button>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {trainingPlans && (
+          <div className="mt-10 max-w-2xl bg-white/5 p-6 rounded-xl shadow-lg">
+            <h2 className="text-2xl font-bold mb-4 text-black">
+              Plan:
+            </h2>
+            <p className="text-lg mb-4">{trainingPlans}</p>
+            </div>
+        )}
+        
+
+      {/* <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {trainingPlans.map((plan) => (
           <Card key={plan.id} className="flex flex-col justify-between h-full">
             <CardHeader>
@@ -155,7 +170,8 @@ const TrainingPage = () => {
             </form>
           )}
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
+      
     </div>
   );
 };

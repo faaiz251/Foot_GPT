@@ -10,7 +10,6 @@ import {
 import { Separator } from "../../components/ui/separator";
 import { Skeleton } from "../../components/ui/skeleton";
 
-const API = "http://localhost:5000/api";
 
 const getAuthToken = () => localStorage.getItem("token");
 
@@ -26,7 +25,7 @@ const HomePage = () => {
 
   const fetchUserProfile = async () => {
     try {
-      const res = await axios.get(`${API}/user/profile`, {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/profile`, {
         headers: { Authorization: `Bearer ${getAuthToken()}` },
       });
       setUser(res.data.user);
@@ -38,7 +37,7 @@ const HomePage = () => {
 
   const fetchDailyTip = async () => {
     try {
-      const res = await axios.get(`${API}/user/daily-tip`, {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/daily-tip`, {
         headers: { Authorization: `Bearer ${getAuthToken()}` },
       });
       setDailyTip(res.data);

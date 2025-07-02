@@ -31,7 +31,7 @@ export function SignupForm({ className, ...props }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/signup", {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, {
         full_name,
         email,
         password,

@@ -48,7 +48,7 @@ export const generateTrainingPlan = async (req, res) => {
     const lines =  result?.candidates?.[0]?.content?.parts?.[0]?.text;
     console.log("Generated content:", lines);
 
-    res.status(200).json({ Plan : lines });
+    res.status(200).json({ trainingPlans : lines });
 
 }  catch (err) {
     res.status(500).json({
