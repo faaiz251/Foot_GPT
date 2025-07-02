@@ -12,8 +12,10 @@ import {
 } from "./select";
 import { useState } from "react";
 import axios from "axios";
+import { Link,useNavigate } from "react-router-dom";
 
 export function SignupForm({ className, ...props }) {
+
   // const [formData, setFormData] = useState({
   //   full_name: "",
   //   email: "",
@@ -27,6 +29,7 @@ export function SignupForm({ className, ...props }) {
   const [password, setPassword] = useState("");
   const [position, setPosition] = useState("");
   const [experience_level, setExperienceLevel] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,7 +44,7 @@ export function SignupForm({ className, ...props }) {
 
       if (res.status === 201 || res.status === 200) {
         alert("Signup successful! Redirecting to login...");
-        window.location.href = "/login";
+        navigate("/login");
       }
     } catch (err) {
       console.error("Signup error:", err);
@@ -137,9 +140,9 @@ export function SignupForm({ className, ...props }) {
 
               <div className="text-center text-sm">
                 Already have an account?{" "}
-                <a href="/login" className="underline underline-offset-4">
+                <Link to="/login" className="underline underline-offset-4">
                   Login
-                </a>
+                </Link>
               </div>
             </div>
           </form>

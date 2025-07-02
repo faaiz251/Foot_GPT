@@ -3,12 +3,15 @@ import { Button } from "./button"
 import { Card, CardContent } from "./card"
 import { Input } from "./input"
 import { Label } from "./label"
-import { useState } from "react"
+import { useState  } from "react";
+import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 
 export function LoginForm({ className, ...props }) {
+    const navigate = useNavigate();
    const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,7 +24,7 @@ export function LoginForm({ className, ...props }) {
       if (res.status === 200 && res.data.token) {
         localStorage.setItem("token", res.data.token);
         alert("Login successful!");
-        window.location.href = "/dashboard"; // or wherever you want to redirect
+        navigate("/dashboard"); // or wherever you want to redirect
       }
     } catch (err) {
       console.error("Login error:", err);
@@ -62,9 +65,9 @@ export function LoginForm({ className, ...props }) {
 
               <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
-                <a href="/signup" className="underline underline-offset-4">
+                <Link to="/signup" className="underline underline-offset-4">
                   Sign up
-                </a>
+                </Link>
               </div>
             </div>
           </form>
