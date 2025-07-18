@@ -11,11 +11,22 @@ import { authenticateUser } from "./routes/middleware/authmiddleware.js";
 
 dotenv.config();
 
+const allowedOrigins = [
+  "http://localhost:5173", // local dev
+  "https://foot-gpt.vercel.app" // production frontend
+];
+
 const app = express();
 
 app.use(cors({
-  origin: "https://foot-gpt.vercel.app",
-  credentials: true // if you're sending cookies or headers
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
 }));
 app.use(express.json());
 

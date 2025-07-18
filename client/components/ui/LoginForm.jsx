@@ -24,7 +24,7 @@ export function LoginForm({ className, ...props }) {
       if (res.status === 200 && res.data.token) {
         localStorage.setItem("token", res.data.token);
         alert("Login successful!");
-        navigate("/dashboard"); // or wherever you want to redirect
+        navigate("/dashboard"); 
       }
     } catch (err) {
       console.error("Login error:", err);
