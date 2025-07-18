@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import MainNav from "../common/MainNav";
 import { Button } from "../../components/ui/button"; // adjust path if needed
 
-
 export default function Home() {
   return (
     <div
@@ -22,16 +21,21 @@ export default function Home() {
         </h1>
 
         <p className="text-lg mt-4 max-w-xl text-gray-700">
-          Personalized training plans, feedback, and progress tracking — powered by AI.
-          Improve your skills every day with intelligent coaching support.
+          Personalized training plans, feedback, and progress tracking — powered
+          by AI. Improve your skills every day with intelligent coaching
+          support.
         </p>
 
         <div className="mt-6 space-x-4">
           <Link to="/signup">
-            <Button variant="outline" size="lg">Get Started</Button>
+            <Button variant="outline" size="lg">
+              Get Started
+            </Button>
           </Link>
           <Link to="/login">
-            <Button variant="outline" size="lg">Already a member?</Button>
+            <Button variant="outline" size="lg">
+              Already a member?
+            </Button>
           </Link>
         </div>
       </main>

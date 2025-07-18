@@ -12,18 +12,9 @@ import {
 } from "./select";
 import { useState } from "react";
 import axios from "axios";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function SignupForm({ className, ...props }) {
-
-  // const [formData, setFormData] = useState({
-  //   full_name: "",
-  //   email: "",
-  //   password: "",
-  //   position: "midfielder",
-  //   experience_level: "beginner",
-  // });
-
   const [full_name, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,13 +25,16 @@ export function SignupForm({ className, ...props }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, {
-        full_name,
-        email,
-        password,
-        position,
-        experience_level,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`,
+        {
+          full_name,
+          email,
+          password,
+          position,
+          experience_level,
+        }
+      );
 
       if (res.status === 201 || res.status === 200) {
         alert("Signup successful! Redirecting to login...");
@@ -56,7 +50,7 @@ export function SignupForm({ className, ...props }) {
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden">
         <CardContent className="p-0">
-          <form  onSubmit={handleSubmit} className="p-6 md:p-8">
+          <form onSubmit={handleSubmit} className="p-6 md:p-8">
             <div className="flex flex-col gap-[20px]">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Create your Account</h1>
@@ -68,7 +62,7 @@ export function SignupForm({ className, ...props }) {
                   type="full_name"
                   placeholder="xyz"
                   required
-                              onChange={(e) => setFullName(e.target.value)}
+                  onChange={(e) => setFullName(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
@@ -85,18 +79,20 @@ export function SignupForm({ className, ...props }) {
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
-                <Input id="password" type="password" required onChange={(e) => setPassword(e.target.value)}  />
-
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
               <div className="grid gap-2">
                 <Label>Position</Label>
 
                 <Select
-                   value={position}
-  onValueChange={(value) => setPosition(value)}
-                  
+                  value={position}
+                  onValueChange={(value) => setPosition(value)}
                 >
-                  
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select Position" />
                   </SelectTrigger>
@@ -113,8 +109,8 @@ export function SignupForm({ className, ...props }) {
                 <Label>Experience Level</Label>
 
                 <Select
-                 value={experience_level}
-  onValueChange={(value) => setExperienceLevel(value)}
+                  value={experience_level}
+                  onValueChange={(value) => setExperienceLevel(value)}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select Experience Level" />

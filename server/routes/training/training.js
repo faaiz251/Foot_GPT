@@ -1,5 +1,5 @@
 import User from "../model/user.js";
-import genAI from '../config/gemini.js';
+import genAI from "../config/gemini.js";
 
 // const generateTrainingPlan = async (position, level) => {
 //   const prompt = `Generate a personalized football training plan for a ${level} ${position}.`;
@@ -35,26 +35,26 @@ import genAI from '../config/gemini.js';
 // };
 
 export const generateTrainingPlan = async (req, res) => {
-    try {
+  try {
     const user = await User.findById(req.user._id);
-  if (!user) return res.status(404).json({ detail: 'User not found' });
+    if (!user) return res.status(404).json({ detail: "User not found" });
 
-  const prompt = `Generate a personalized football training plan for a ${user.experience_level} ${user.position}.`;
- 
-     const result = await genAI.models.generateContent({
+    const prompt = `Generate a personalized football training plan for a ${user.experience_level} ${user.position}.`;
+
+    const result = await genAI.models.generateContent({
       model: "gemini-2.0-flash",
       contents: [{ role: "user", parts: [{ text: prompt }] }],
     });
-    const lines =  result?.candidates?.[0]?.content?.parts?.[0]?.text;
+    const lines = result?.candidates?.[0]?.content?.parts?.[0]?.text;
     console.log("Generated content:", lines);
 
-    res.status(200).json({ trainingPlans : lines });
-
-}  catch (err) {
+    res.status(200).json({ trainingPlans: lines });
+  } catch (err) {
     res.status(500).json({
-    message: "Failed to generate question", error: err.message
+      message: "Failed to generate question",
+      error: err.message,
     });
-    }
+  }
 };
 
 // app.get('/api/training/plans', verifyToken, async (req, res) => {

@@ -7,9 +7,7 @@ import {
   CardTitle,
   CardDescription,
 } from "../../components/ui/card";
-import { Separator } from "../../components/ui/separator";
 import { Skeleton } from "../../components/ui/skeleton";
-
 
 const getAuthToken = () => localStorage.getItem("token");
 
@@ -25,9 +23,12 @@ const HomePage = () => {
 
   const fetchUserProfile = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/profile`, {
-        headers: { Authorization: `Bearer ${getAuthToken()}` },
-      });
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/profile`,
+        {
+          headers: { Authorization: `Bearer ${getAuthToken()}` },
+        }
+      );
       setUser(res.data.user);
       // setStats(res.data.stats);
     } catch (err) {
@@ -37,9 +38,12 @@ const HomePage = () => {
 
   const fetchDailyTip = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/daily-tip`, {
-        headers: { Authorization: `Bearer ${getAuthToken()}` },
-      });
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/daily-tip`,
+        {
+          headers: { Authorization: `Bearer ${getAuthToken()}` },
+        }
+      );
       setDailyTip(res.data);
     } catch (err) {
       console.error("Error fetching daily tip:", err);
@@ -52,7 +56,11 @@ const HomePage = () => {
       <Card>
         <CardHeader>
           <CardTitle>
-            {user ? `Welcome back, ${user.full_name}! ⚽` : <Skeleton className="h-6 w-1/2" />}
+            {user ? (
+              `Welcome back, ${user.full_name}! ⚽`
+            ) : (
+              <Skeleton className="h-6 w-1/2" />
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent className="grid md:grid-cols-3 gap-4">
@@ -65,13 +73,17 @@ const HomePage = () => {
           <Card className="bg-green-50">
             <CardContent className="pt-4">
               <p className="font-semibold text-green-800">Experience</p>
-              <p className="text-green-600 capitalize">{user?.experience_level}</p>
+              <p className="text-green-600 capitalize">
+                {user?.experience_level}
+              </p>
             </CardContent>
           </Card>
           <Card className="bg-purple-50">
             <CardContent className="pt-4">
               <p className="font-semibold text-purple-800">Member Since</p>
-              <p className="text-purple-600">{user && new Date(user.createdAt).toLocaleDateString('en-GB')}</p>
+              <p className="text-purple-600">
+                {user && new Date(user.createdAt).toLocaleDateString("en-GB")}
+              </p>
             </CardContent>
           </Card>
         </CardContent>
