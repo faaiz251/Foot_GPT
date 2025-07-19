@@ -12,34 +12,35 @@ import { authenticateUser } from "./routes/middleware/authmiddleware.js";
 dotenv.config();
 
 const allowedOrigins = [
-  "http://localhost:5173", // local dev
-  "https://foot-gpt.vercel.app" // production frontend
+  "http://localhost:5173", 
+  "https://foot-gpt.vercel.app",
 ];
 
 const app = express();
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/user" , authenticateUser , dashRoutes );
+app.use("/api/user", authenticateUser, dashRoutes);
 
-cron.schedule('0 * * * *', () => {
-  console.log('Running cron job at every hour at minute 0!');
-  // Example: call a function to update database, clear cache, etc.
+cron.schedule("0 * * * *", () => {
+  console.log("Running cron job at every hour at minute 0!");
 });
 
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).send("Hi to cron job from server");
 });
 

@@ -6,13 +6,9 @@ import {
   TabsContent,
 } from "../../components/ui/tabs";
 import { Button } from "../../components/ui/button";
-import axios from "axios";
 
 import HomePage from "../Minor Pages/HomePage";
 import TrainingPage from "../Minor Pages/TrainingPage";
-// import TrainingPage from "./TrainingPage";
-// import HistoryPage from "./HistoryPage";
-// import TipsPage from "./TipsPage";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("home");
