@@ -28,17 +28,32 @@ export const getDailyTip = async (req, res) => {
     const user = await User.findById(req.user._id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const prompt = `
-    Generate a daily motivational tip for a ${user.experience_level} football ${user.position}.
-    
-    Provide:
-    1. A practical football tip (1-2 sentences)
-    2. A motivational quote related to football or sports
-    
-    Format:
-    Tip: [Your tip here]
-    Quote: [Your motivational quote here]
-    `;
+   const prompt = `
+You are an AI football coach assistant. Based on the user's profile below, generate a daily motivational tip and quote specifically for them.
+
+User Profile:
+- Position: ${user.position}
+- Experience Level: ${user.experience_level}
+
+Your response must include both:
+1. A **practical football tip** tailored to the user's position and experience level. It should be realistic, relevant, and written in 1–2 concise sentences.
+2. A **motivational quote** related to football, training, or sports mentality. It must be relevant and inspiring.
+
+Formatting Instructions:
+- Use this **exact format**:
+Tip: [Your tip here]
+Quote: [Your motivational quote here]
+
+Strict Rules:
+- Do NOT include asterisks, quotes, or markdown symbols.
+- Do NOT include extra headers, titles, or explanations.
+- Do NOT return any greetings or closing remarks.
+- Avoid overly generic advice. Make the tip specific to the user's role and skill level.
+- Avoid repeating words like "Remember," "Always," or "As a player" unless necessary for clarity.
+
+Be concise, insightful, and structured. Only output the formatted content.
+`;
+
 
     const response = await genAI.models.generateContent({
       model: "gemini-2.0-flash",
@@ -52,9 +67,9 @@ export const getDailyTip = async (req, res) => {
     let tip = "";
     let quote = "";
     content.split("\n").forEach((line) => {
-      if (line.startsWith("**Tip:**")) {
+      if (line.startsWith("Tip:")) {
         tip = line.replace("Tip:", "").trim();
-      } else if (line.startsWith("**Quote:**")) {
+      } else if (line.startsWith("Quote:")) {
         quote = line.replace("Quote:", "").trim();
       }
     });

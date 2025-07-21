@@ -80,9 +80,6 @@ Instructions:
     const lines = linesRaw.split("\n");
     console.log("Generated content:", linesRaw);
 
-        res.status(200).json({ trainingPlans: lines });
-
-
     // Initialize variables
     let title = "", description = "", drills = [], duration = 45, difficulty = "Medium";
     let section = "";
