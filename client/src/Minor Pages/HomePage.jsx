@@ -14,11 +14,9 @@ const getAuthToken = () => localStorage.getItem("token");
 const HomePage = () => {
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState(null);
-  const [dailyTip, setDailyTip] = useState(null);
 
   useEffect(() => {
     fetchUserProfile();
-    fetchDailyTip();
   }, []);
 
   const fetchUserProfile = async () => {
@@ -33,20 +31,6 @@ const HomePage = () => {
       // setStats(res.data.stats);
     } catch (err) {
       console.error("Error fetching profile:", err);
-    }
-  };
-
-  const fetchDailyTip = async () => {
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/user/daily-tip`,
-        {
-          headers: { Authorization: `Bearer ${getAuthToken()}` },
-        }
-      );
-      setDailyTip(res.data);
-    } catch (err) {
-      console.error("Error fetching daily tip:", err);
     }
   };
 
@@ -117,19 +101,7 @@ const HomePage = () => {
       )}
 
       {/* Daily Tip */}
-      {dailyTip && (
-        <Card className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-          <CardHeader>
-            <CardTitle>💡 Today's Tip</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-lg mb-4">{dailyTip.tip}</p>
-            <blockquote className="border-l-4 border-white/30 pl-4 italic">
-              "{dailyTip.motivational_quote}"
-            </blockquote>
-          </CardContent>
-        </Card>
-      )}
+   
     </div>
   );
 };
