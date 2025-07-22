@@ -10,6 +10,7 @@ import { Button } from "../../components/ui/button";
 import HomePage from "../Minor Pages/HomePage";
 import TrainingPage from "../Minor Pages/TrainingPage";
 import { Dailytip } from "../Minor Pages/Dailytip";
+import History from "../Minor Pages/History";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("home");
@@ -96,9 +97,7 @@ const Dashboard = () => {
           <TrainingPage />
         </TabsContent>
         <TabsContent value="history">
-          <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            History content here
-          </div>
+         <History />
         </TabsContent>
         <TabsContent value="tips">
          <Dailytip />
