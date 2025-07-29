@@ -8,7 +8,6 @@ import authRoutes from "./routes/auth/auth.js";
 import userRoutes from "./routes/me/userRoutes.js";
 import dashRoutes from "./routes/dash/dash.js";
 import { authenticateUser } from "./routes/middleware/authmiddleware.js";
-
 dotenv.config();
 
 const allowedOrigins = [
@@ -43,6 +42,11 @@ cron.schedule("0 * * * *", () => {
 app.get("/", (req, res) => {
   res.status(200).send("Hi to cron job from server");
 });
+
+// app.get('/api/training/plans', authenticateUser , async (req, res) => {
+//   const plans = await db.collection('trainingplans').find({ user_id: req.userId }).toArray();
+//   res.json(plans);
+// });
 
 mongoose
   .connect(process.env.MONGO_URI, {

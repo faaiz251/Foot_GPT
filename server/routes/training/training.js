@@ -81,26 +81,34 @@ Instructions:
     console.log("Generated content:", linesRaw);
 
     // Initialize variables
-    let title = "", description = "", drills = [], duration = 45, difficulty = "Medium";
+    let title = "",
+      description = "",
+      drills = [],
+      duration = 45,
+      difficulty = "Medium";
     let section = "";
 
     // Parse lines
     for (let line of lines) {
       line = line.trim();
       if (line.startsWith("Title:")) title = line.replace("Title:", "").trim();
-      else if (line.startsWith("Description:")) description = line.replace("Description:", "").trim();
+      else if (line.startsWith("Description:"))
+        description = line.replace("Description:", "").trim();
       else if (line.startsWith("Drills:")) section = "drills";
       else if (line.startsWith("Duration:")) {
         const match = line.match(/\d+/);
         duration = match ? parseInt(match[0]) : 45;
-      } else if (line.startsWith("Difficulty:")) difficulty = line.replace("Difficulty:", "").trim();
-      else if (section === "drills" && line.startsWith("-")) drills.push(line.slice(1).trim());
+      } else if (line.startsWith("Difficulty:"))
+        difficulty = line.replace("Difficulty:", "").trim();
+      else if (section === "drills" && line.startsWith("-"))
+        drills.push(line.slice(1).trim());
     }
 
     // Validate parsed values
     if (!title || !description || drills.length === 0) {
       return res.status(500).json({
-        message: "Training Plan generation failed: missing one or more required fields.",
+        message:
+          "Training Plan generation failed: missing one or more required fields.",
       });
     }
 
@@ -128,7 +136,6 @@ Instructions:
         difficulty,
       },
     });
-
   } catch (err) {
     console.error("Training Plan Error:", err);
     return res.status(500).json({
@@ -138,10 +145,9 @@ Instructions:
   }
 };
 
-// app.get('/api/training/plans', verifyToken, async (req, res) => {
-//   const plans = await db.collection('training_plans').find({ user_id: req.userId }).toArray();
-//   res.json(plans);
-// });
+
+
+
 
 // app.post('/api/training/complete', verifyToken, async (req, res) => {
 //   const { training_plan_id, rating, notes } = req.body;

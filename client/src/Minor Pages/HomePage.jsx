@@ -5,7 +5,6 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "../../components/ui/card";
 import { Skeleton } from "../../components/ui/skeleton";
 
@@ -28,7 +27,7 @@ const HomePage = () => {
         }
       );
       setUser(res.data.user);
-      // setStats(res.data.stats);
+      setStats(res.data.stats);
     } catch (err) {
       console.error("Error fetching profile:", err);
     }
@@ -80,14 +79,14 @@ const HomePage = () => {
             <CardTitle>Your Progress</CardTitle>
           </CardHeader>
           <CardContent className="grid md:grid-cols-2 gap-4">
-            <Card className="bg-orange-50 text-center">
+            {/* <Card className="bg-orange-50 text-center">
               <CardContent className="pt-4">
                 <div className="text-3xl font-bold text-orange-600">
                   {stats.total_training_sessions}
                 </div>
                 <div className="text-orange-800">Training Sessions</div>
               </CardContent>
-            </Card>
+            </Card> */}
             <Card className="bg-teal-50 text-center">
               <CardContent className="pt-4">
                 <div className="text-3xl font-bold text-teal-600">

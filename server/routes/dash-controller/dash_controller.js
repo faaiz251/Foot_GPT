@@ -1,5 +1,6 @@
 import User from "../model/user.js";
 import genAI from "../config/gemini.js";
+import { TrainingPlan } from "../model/Trainingplan.js";
 
 export const getUserProfile = async (req, res) => {
   try {
@@ -7,14 +8,14 @@ export const getUserProfile = async (req, res) => {
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // const sessionsCount = await TrainingSession.countDocuments({ user_id: req.user._id });
-    // const plansCount = await TrainingPlan.countDocuments({ user_id: req.user._id });
+    const plansCount = await TrainingPlan.countDocuments({ user_id: req.user._id });
 
     res.json({
       user,
-      // stats: {
-      //   total_training_sessions: sessionsCount,
-      //   total_training_plans: plansCount,
-      // },
+      stats: {
+        // total_training_sessions: sessionsCount,
+        total_training_plans: plansCount,
+      },
     });
   } catch (err) {
     res
