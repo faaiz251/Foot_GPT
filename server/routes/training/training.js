@@ -116,7 +116,7 @@ Instructions:
     const trainingPlan = new TrainingPlan({
       user: user._id,
       title,
-      description,
+      description,  
       drills,
       duration_minutes: duration,
       difficulty,

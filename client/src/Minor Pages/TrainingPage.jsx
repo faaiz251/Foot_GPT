@@ -27,7 +27,7 @@ import {
 const getAuthToken = () => localStorage.getItem("token");
 
 const TrainingPage = () => {
-  const [trainingPlans, setTrainingPlans] = useState([]);
+  const [trainingPlan, setTrainingPlan] = useState([]);
   const [generating, setGenerating] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
 
@@ -56,9 +56,9 @@ const TrainingPage = () => {
           headers: { Authorization: `Bearer ${getAuthToken()}` },
         }
       );
-      const fullText = response.data.trainingPlans;
+      // const fullText = response.data.trainingPlan;
       //   const parts = fullText.split("\n").filter((line) => line.trim() !== "");
-      setTrainingPlans(fullText);
+setTrainingPlan([response.data.trainingPlan]);
     } catch (error) {
       console.error("Error generating plan:", error);
     }
@@ -91,16 +91,16 @@ const TrainingPage = () => {
           {generating ? "Generating..." : "🤖 Generate New Plan"}
         </Button>
       </div>
-
-      {trainingPlans && (
+.
+      {/* {trainingPlan.map((plan)=>  (
         <div className="mt-10 max-w-2xl bg-white/5 p-6 rounded-xl shadow-lg">
           <h2 className="text-2xl font-bold mb-4 text-black">Plan:</h2>
-          <p className="text-lg mb-4">{trainingPlans}</p>
+          <p className="text-lg mb-4">{plan}</p>
         </div>
-      )}
+      ))} */}
 
-      {/* <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {trainingPlans.map((plan) => (
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {trainingPlan.map((plan) => (
           <Card key={plan.id} className="flex flex-col justify-between h-full">
             <CardHeader>
               <CardTitle>{plan.title}</CardTitle>
@@ -132,7 +132,7 @@ const TrainingPage = () => {
         ))}
       </div>
 
-      <Dialog open={!!selectedPlan} onOpenChange={() => setSelectedPlan(null)}>
+     <Dialog open={!!selectedPlan} onOpenChange={() => setSelectedPlan(null)}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Complete Training Session</DialogTitle>
@@ -150,7 +150,7 @@ const TrainingPage = () => {
               }}
               className="space-y-4"
             >
-              <div>
+              <div className="space-y-2">
                 <Label>Rating (1-5 stars)</Label>
                 <Select name="rating" required>
                   <SelectTrigger>
@@ -166,17 +166,19 @@ const TrainingPage = () => {
                 </Select>
               </div>
 
-              <div>
+              <div className="space-y-2">
                 <Label>Notes (optional)</Label>
                 <Textarea
                   name="notes"
-                  rows={3}
+                  rows={10}
                   placeholder="How did you feel? Any observations?"
+                  className="h-[150px]"
                 />
               </div>
 
-              <div className="flex space-x-3">
-                <Button type="submit" className="w-full">
+              <div className="space-x-3">
+                <div className="flex justify-center flex-col w-[300px] gap-[20px] ml-[80px]">
+                <Button type="submit">
                   Complete
                 </Button>
                 <Button
@@ -187,11 +189,12 @@ const TrainingPage = () => {
                 >
                   Cancel
                 </Button>
+                </div>
               </div>
             </form>
           )}
         </DialogContent>
-      </Dialog> */}
+      </Dialog> 
     </div>
   );
 };
