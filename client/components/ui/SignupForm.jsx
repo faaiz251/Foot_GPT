@@ -13,6 +13,8 @@ import {
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
 export function SignupForm({ className, ...props }) {
   const [full_name, setFullName] = useState("");
@@ -20,10 +22,13 @@ export function SignupForm({ className, ...props }) {
   const [password, setPassword] = useState("");
   const [position, setPosition] = useState("");
   const [experience_level, setExperienceLevel] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`,
@@ -37,12 +42,14 @@ export function SignupForm({ className, ...props }) {
       );
 
       if (res.status === 201 || res.status === 200) {
-        alert("Signup successful! Redirecting to login...");
-        navigate("/login");
+        toast.success("Signup successful! Redirecting to login...", { duration: 3000 });
+        setTimeout(() => navigate("/login"), 1000);
       }
     } catch (err) {
-      console.error("Signup error:", err);
-      alert("Signup failed. Please try again.");
+      const msg = err.response?.data?.message || "Signup failed. Please try again.";
+      toast.error(msg, { duration: 4000 });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -124,9 +131,17 @@ export function SignupForm({ className, ...props }) {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-black text-white cursor-pointer hover:bg-gray-800"
+                disabled={loading}
+                className="w-full bg-black text-white cursor-pointer hover:bg-gray-800 disabled:opacity-50"
               >
-                Signup
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Signing up...
+                  </span>
+                ) : (
+                  "Signup"
+                )}
               </Button>
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                 <span className="relative z-10 bg-background px-2 text-muted-foreground">

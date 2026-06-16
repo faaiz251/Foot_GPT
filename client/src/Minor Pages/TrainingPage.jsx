@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Button } from "../../components/ui/button";
 import {
@@ -23,6 +23,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../components/ui/dialog";
+import { toast } from "react-hot-toast";
+import { Loader2, Dumbbell, Clock, Flame } from "lucide-react";
 
 const getAuthToken = () => localStorage.getItem("token");
 
@@ -30,21 +32,6 @@ const TrainingPage = () => {
   const [trainingPlan, setTrainingPlan] = useState([]);
   const [generating, setGenerating] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
-
-  //   useEffect(() => {
-  //     fetchTrainingPlans();
-  //   }, []);
-
-  //   const fetchTrainingPlans = async () => {
-  //     try {
-  //       const response = await axios.get(`${API}/training/plans`, {
-  //         headers: { Authorization: `Bearer ${getAuthToken()}` },
-  //       });
-  //       setTrainingPlans(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching training plans:", error);
-  //     }
-  //   };
 
   const generateNewPlan = async () => {
     setGenerating(true);
@@ -56,65 +43,62 @@ const TrainingPage = () => {
           headers: { Authorization: `Bearer ${getAuthToken()}` },
         }
       );
-      // const fullText = response.data.trainingPlan;
-      //   const parts = fullText.split("\n").filter((line) => line.trim() !== "");
-setTrainingPlan([response.data.trainingPlan]);
+      setTrainingPlan([response.data.trainingPlan]);
+      toast.success("Training plan generated!", { duration: 3000 });
     } catch (error) {
-      console.error("Error generating plan:", error);
+      const msg = error.response?.data?.message || "Failed to generate training plan.";
+      toast.error(msg, { duration: 4000 });
+    } finally {
+      setGenerating(false);
     }
-    setGenerating(false);
   };
 
-  //   const completePlan = async (planId, rating, notes) => {
-  //     try {
-  //       await axios.post(
-  //         `${API}/training/complete`,
-  //         { training_plan_id: planId, rating, notes },
-  //         { headers: { Authorization: `Bearer ${getAuthToken()}` } }
-  //       );
-  //       alert("Training session completed!");
-  //       setSelectedPlan(null);
-  //     } catch (error) {
-  //       console.error("Error completing training:", error);
-  //     }
-  //   };
-
   return (
-    <div className="space-y-6 p-4">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 className="text-2xl font-bold">Training Plans</h2>
         <Button
           onClick={generateNewPlan}
-          className="cursor-pointer"
           disabled={generating}
+          className="cursor-pointer disabled:opacity-50"
         >
-          {generating ? "Generating..." : "🤖 Generate New Plan"}
+          {generating ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Generating...
+            </span>
+          ) : (
+            <>
+              <Dumbbell className="w-4 h-4 mr-2" />
+              Generate New Plan
+            </>
+          )}
         </Button>
       </div>
-.
-      {/* {trainingPlan.map((plan)=>  (
-        <div className="mt-10 max-w-2xl bg-white/5 p-6 rounded-xl shadow-lg">
-          <h2 className="text-2xl font-bold mb-4 text-black">Plan:</h2>
-          <p className="text-lg mb-4">{plan}</p>
-        </div>
-      ))} */}
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
         {trainingPlan.map((plan) => (
           <Card key={plan.id} className="flex flex-col justify-between h-full">
             <CardHeader>
-              <CardTitle>{plan.title}</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Dumbbell className="w-5 h-5 text-green-600" />
+                {plan.title}
+              </CardTitle>
               <CardDescription>{plan.description}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="text-sm text-muted-foreground">
-                <p>Duration: {plan.duration_minutes} minutes</p>
-                <p>
-                  Difficulty: <span className={
+              <div className="text-sm text-muted-foreground flex items-center gap-4">
+                <span className="flex items-center gap-1">
+                  <Clock className="w-4 h-4" />
+                  {plan.duration_minutes} min
+                </span>
+                <span className="flex items-center gap-1">
+                  <Flame className="w-4 h-4" />
+                  <span className={
                     plan.difficulty === "Easy" ? "text-green-600" :
                     plan.difficulty === "Medium" ? "text-yellow-600" : "text-red-600"
                   }>{plan.difficulty}</span>
-                </p>
+                </span>
               </div>
               <div>
                 <h4 className="font-semibold mb-2">Drills:</h4>
@@ -124,7 +108,7 @@ setTrainingPlan([response.data.trainingPlan]);
                   ))}
                 </ul>
               </div>
-              <Button variant="outline" onClick={() => setSelectedPlan(plan)}>
+              <Button variant="outline" onClick={() => setSelectedPlan(plan)} className="w-full">
                 Start Training
               </Button>
             </CardContent>
@@ -132,8 +116,8 @@ setTrainingPlan([response.data.trainingPlan]);
         ))}
       </div>
 
-     <Dialog open={!!selectedPlan} onOpenChange={() => setSelectedPlan(null)}>
-        <DialogContent>
+      <Dialog open={!!selectedPlan} onOpenChange={() => setSelectedPlan(null)}>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Complete Training Session</DialogTitle>
           </DialogHeader>
@@ -142,11 +126,8 @@ setTrainingPlan([response.data.trainingPlan]);
               onSubmit={(e) => {
                 e.preventDefault();
                 const formData = new FormData(e.target);
-                completePlan(
-                  selectedPlan.id,
-                  parseInt(formData.get("rating")),
-                  formData.get("notes")
-                );
+                toast.success(`Training completed! Rating: ${formData.get("rating")}/5`, { duration: 3000 });
+                setSelectedPlan(null);
               }}
               className="space-y-4"
             >
@@ -170,17 +151,14 @@ setTrainingPlan([response.data.trainingPlan]);
                 <Label>Notes (optional)</Label>
                 <Textarea
                   name="notes"
-                  rows={10}
+                  rows={4}
                   placeholder="How did you feel? Any observations?"
-                  className="h-[150px]"
+                  className="resize-none"
                 />
               </div>
 
-              <div className="space-x-3">
-                <div className="flex justify-center flex-col w-[300px] gap-[20px] ml-[80px]">
-                <Button type="submit">
-                  Complete
-                </Button>
+              <div className="flex flex-col gap-3">
+                <Button type="submit" className="w-full">Complete</Button>
                 <Button
                   type="button"
                   variant="outline"
@@ -189,12 +167,11 @@ setTrainingPlan([response.data.trainingPlan]);
                 >
                   Cancel
                 </Button>
-                </div>
               </div>
             </form>
           )}
         </DialogContent>
-      </Dialog> 
+      </Dialog>
     </div>
   );
 };

@@ -5,15 +5,20 @@ import { Input } from "./input";
 import { Label } from "./label";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 import axios from "axios";
 
 export function LoginForm({ className, ...props }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
@@ -25,12 +30,14 @@ export function LoginForm({ className, ...props }) {
 
       if (res.status === 200 && res.data.token) {
         localStorage.setItem("token", res.data.token);
-        alert("Login successful!");
+        toast.success("Login successful!", { duration: 3000 });
         navigate("/dashboard");
       }
     } catch (err) {
-      console.error("Login error:", err);
-      alert("Invalid credentials or server error.");
+      const msg = err.response?.data?.message || "Invalid credentials or server error.";
+      toast.error(msg, { duration: 4000 });
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -76,9 +83,17 @@ export function LoginForm({ className, ...props }) {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-black text-white cursor-pointer hover:bg-gray-800"
+                disabled={loading}
+                className="w-full bg-black text-white cursor-pointer hover:bg-gray-800 disabled:opacity-50"
               >
-                Login
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Logging in...
+                  </span>
+                ) : (
+                  "Login"
+                )}
               </Button>
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                 <span className="relative z-10 bg-background px-2 text-muted-foreground">

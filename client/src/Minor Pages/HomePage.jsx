@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Card,
@@ -7,12 +7,15 @@ import {
   CardTitle,
 } from "../../components/ui/card";
 import { Skeleton } from "../../components/ui/skeleton";
+import { toast } from "react-hot-toast";
+import { User, Target, Calendar, TrendingUp } from "lucide-react";
 
 const getAuthToken = () => localStorage.getItem("token");
 
 const HomePage = () => {
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchUserProfile();
@@ -29,7 +32,9 @@ const HomePage = () => {
       setUser(res.data.user);
       setStats(res.data.stats);
     } catch (err) {
-      console.error("Error fetching profile:", err);
+      toast.error("Failed to load profile", { duration: 3000 });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,35 +43,45 @@ const HomePage = () => {
       {/* Welcome Section */}
       <Card>
         <CardHeader>
-          <CardTitle>
-            {user ? (
+          <CardTitle className="flex items-center gap-2">
+            <User className="w-6 h-6 text-green-600" />
+            {loading ? (
+              <Skeleton className="h-6 w-1/2" />
+            ) : user ? (
               `Welcome back, ${user.full_name}! ⚽`
             ) : (
-              <Skeleton className="h-6 w-1/2" />
+              "Welcome!"
             )}
           </CardTitle>
         </CardHeader>
-        <CardContent className="grid md:grid-cols-3 gap-4">
+        <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card className="bg-blue-50">
-            <CardContent className="pt-4">
-              <p className="font-semibold text-blue-800">Position</p>
-              <p className="text-blue-600 capitalize">{user?.position}</p>
+            <CardContent className="pt-4 flex items-center gap-3">
+              <Target className="w-8 h-8 text-blue-600" />
+              <div>
+                <p className="font-semibold text-blue-800">Position</p>
+                <p className="text-blue-600 capitalize">{user?.position || "—"}</p>
+              </div>
             </CardContent>
           </Card>
           <Card className="bg-green-50">
-            <CardContent className="pt-4">
-              <p className="font-semibold text-green-800">Experience</p>
-              <p className="text-green-600 capitalize">
-                {user?.experience_level}
-              </p>
+            <CardContent className="pt-4 flex items-center gap-3">
+              <TrendingUp className="w-8 h-8 text-green-600" />
+              <div>
+                <p className="font-semibold text-green-800">Experience</p>
+                <p className="text-green-600 capitalize">{user?.experience_level || "—"}</p>
+              </div>
             </CardContent>
           </Card>
           <Card className="bg-purple-50">
-            <CardContent className="pt-4">
-              <p className="font-semibold text-purple-800">Member Since</p>
-              <p className="text-purple-600">
-                {user && new Date(user.createdAt).toLocaleDateString("en-GB")}
-              </p>
+            <CardContent className="pt-4 flex items-center gap-3">
+              <Calendar className="w-8 h-8 text-purple-600" />
+              <div>
+                <p className="font-semibold text-purple-800">Member Since</p>
+                <p className="text-purple-600">
+                  {user ? new Date(user.createdAt).toLocaleDateString("en-GB") : "—"}
+                </p>
+              </div>
             </CardContent>
           </Card>
         </CardContent>
@@ -76,17 +91,12 @@ const HomePage = () => {
       {stats && (
         <Card>
           <CardHeader>
-            <CardTitle>Your Progress</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-green-600" />
+              Your Progress
+            </CardTitle>
           </CardHeader>
-          <CardContent className="grid md:grid-cols-2 gap-4">
-            {/* <Card className="bg-orange-50 text-center">
-              <CardContent className="pt-4">
-                <div className="text-3xl font-bold text-orange-600">
-                  {stats.total_training_sessions}
-                </div>
-                <div className="text-orange-800">Training Sessions</div>
-              </CardContent>
-            </Card> */}
+          <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Card className="bg-teal-50 text-center">
               <CardContent className="pt-4">
                 <div className="text-3xl font-bold text-teal-600">
@@ -98,9 +108,6 @@ const HomePage = () => {
           </CardContent>
         </Card>
       )}
-
-      {/* Daily Tip */}
-   
     </div>
   );
 };
